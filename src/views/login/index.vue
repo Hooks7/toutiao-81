@@ -34,6 +34,12 @@ export default {
           this.$http.post('/authorizations', this.formData).then(result => {
             window.localStorage.setItem('user-info', JSON.stringify(result.data.data))
             this.$router.push('/home')
+          }).catch(()=>{
+            this.$message({
+           showClose: true,
+           message: '警告哦，这是一条警告消息',
+           type: 'warning'
+        })
           })
         }
       })
