@@ -43,7 +43,7 @@ export default {
             .catch(() => {
               this.$message({
                 showClose: true,
-                message: '警告哦，这是一条警告消息',
+                message: '警告哦，这是一条错误消息',
                 type: 'warning'
               })
             })
