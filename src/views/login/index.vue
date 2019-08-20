@@ -4,7 +4,7 @@
       <div class="title">
         <img src="../../assets/img/12sa.png" />
       </div>
-      <el-form ref="form" :model="formData" :rules="rules" >
+      <el-form ref="form" :model="formData" :rules="rules">
         <el-form-item prop="mobile">
           <el-input placeholder="请输入手机号" v-model="formData.mobile"></el-input>
         </el-form-item>
@@ -16,7 +16,7 @@
           <el-checkbox v-model="formData.check">我已经阅读并同意协议和隐私条款</el-checkbox>
         </el-form-item>
         <el-form-item>
-          <el-button @click="login" type="danger" style="width:100%" >登录</el-button>
+          <el-button @click="login" type="danger" style="width:100%">登录</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -31,16 +31,22 @@ export default {
       // 要进行手机号和验证码的校验 validate手动校验表单数据
       this.$refs.form.validate(isOk => {
         if (isOk) {
-          this.$http.post('/authorizations', this.formData).then(result => {
-            window.localStorage.setItem('user-info', JSON.stringify(result.data.data))
-            this.$router.push('/home')
-          }).catch(()=>{
-            this.$message({
-           showClose: true,
-           message: '警告哦，这是一条警告消息',
-           type: 'warning'
-        })
-          })
+          this.$http
+            .post('/authorizations', this.formData)
+            .then(result => {
+              window.localStorage.setItem(
+                'user-info',
+                JSON.stringify(result.data.data)
+              )
+              this.$router.push('/home')
+            })
+            .catch(() => {
+              this.$message({
+                showClose: true,
+                message: '警告哦，这是一条警告消息',
+                type: 'warning'
+              })
+            })
         }
       })
     }
@@ -76,7 +82,6 @@ export default {
           {
             pattern: /^1[345678]\d{9}$/,
             message: '手机号格式错误'
-
           }
         ],
         code: [
