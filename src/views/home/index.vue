@@ -11,7 +11,7 @@
       <el-header>
        <layout-header></layout-header>
       </el-header>
-      <el-main>尾部
+      <el-main style="padding:0">
 <router-view></router-view>
       </el-main>
     </el-container>
