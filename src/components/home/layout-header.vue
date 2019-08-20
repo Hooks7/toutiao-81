@@ -1,21 +1,22 @@
 <template>
-  <el-row type="flex" class="layout-header" justify="space-between">
-    <el-col :span="16" class="left-header">
+  <el-row type="flex" class="layout-header" >
+    <el-col :span="21" class="left-header">
       <i class="el-icon-s-night"></i>
       <span>上海香蕉计划文化发展有限公司</span>
     </el-col>
     <el-col :span="3" class="layout-right">
-      <img :src="user.photo" alt />
+      <!-- 图片设置 -->
+      <img :src="user.photo ? user.photo :defaultImg" alt />
       <!-- 下拉模板 -->
-      <el-dropdown trigger="click">
+      <el-dropdown trigger="click" @command=' handleCommand '>
         <span class="el-dropdown-link">
           {{user.name}}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>个人信息</el-dropdown-item>
-          <el-dropdown-item>git地址</el-dropdown-item>
-          <el-dropdown-item>退出</el-dropdown-item>
+          <el-dropdown-item command='account'>个人信息</el-dropdown-item>
+          <el-dropdown-item command='git'>git地址</el-dropdown-item>
+          <el-dropdown-item command='out'>退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-col>
@@ -26,7 +27,8 @@
 export default {
   data () {
     return {
-      user: {}
+      user: {},
+      defaultImg: require('../../assets/img/avatar.jpg')
     }
   },
   methods: {
@@ -42,6 +44,19 @@ export default {
         }).then(result => {
           this.user = result.data.data
         })
+    },
+    // 退出操作
+    handleCommand (command) {
+      // 个人信息
+      if (command === 'account') {
+        // git地址
+      } else if (command === 'git') {
+        window.location.href = 'https://github.com'
+        // 退出
+      } else { //
+        this.$router.push('/login')
+        window.localStorage.clear() // 清除本地在游览器上所有前端缓存
+      }
     }
   },
   created () {
