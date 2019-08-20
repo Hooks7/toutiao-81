@@ -49,6 +49,7 @@ export default {
     handleCommand (command) {
       // 个人信息
       if (command === 'account') {
+        this.$router.push('/home/account')
         // git地址
       } else if (command === 'git') {
         window.location.href = 'https://github.com'

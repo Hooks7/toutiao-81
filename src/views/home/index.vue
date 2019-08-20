@@ -11,7 +11,9 @@
       <el-header>
        <layout-header></layout-header>
       </el-header>
-      <el-main>尾部</el-main>
+      <el-main>尾部
+<router-view></router-view>
+      </el-main>
     </el-container>
   </el-container>
 </template>
