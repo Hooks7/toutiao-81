@@ -58,7 +58,7 @@ export default {
 .title {
   padding: 13px 0;
   text-align: center;
-  background-color: red;
+  background-color: #F56C6C;
   img {
     width: 120px;
     height: 30px;

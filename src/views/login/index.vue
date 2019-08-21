@@ -36,7 +36,7 @@ export default {
             .then(result => {
               window.localStorage.setItem(
                 'user-info',
-                JSON.stringify(result.data.data)
+                JSON.stringify(result.data)
               )
               this.$router.push('/home')
             })
