@@ -40,13 +40,6 @@ export default {
               )
               this.$router.push('/home')
             })
-            .catch(() => {
-              this.$message({
-                showClose: true,
-                message: '警告哦，这是一条错误消息',
-                type: 'warning'
-              })
-            })
         }
       })
     }
@@ -106,7 +99,7 @@ export default {
 .login {
   width: 100%;
   height: 100vh;
-  background-image: url("../../assets/img/fbf.jpg");
+  background-image: url("../../assets/img/12.jpg");
   background-size: cover; /* 图片可视区域最大展示*/
   display: flex;
   justify-content: center; /* 横向 居中*/
