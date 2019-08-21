@@ -34,16 +34,16 @@ export default {
   methods: {
     // 获取用户信息
     getUserInfo () {
-      let userInfo = window.localStorage.getItem('user-info') // 获取用户存储信息 存储信息没有token
-      let token = userInfo ? JSON.parse(userInfo).token : null
+      // let userInfo = window.localStorage.getItem('user-info') // 获取用户存储信息 存储信息没有token
+      // let token = userInfo ? JSON.parse(userInfo).token : null
       // 发送请求
-      token &&
-        this.$http({
-          url: 'user/profile',
-          headers: { Authorization: `Bearer ${token}` } // 将headers中赋值 后端需要的token身份信息  携带令牌
-        }).then(result => {
-          this.user = result.data.data
-        })
+      // token &&
+      this.$http({
+        url: 'user/profile'
+        // headers: { Authorization: `Bearer ${token}` } // 将headers中赋值 后端需要的token身份信息  携带令牌
+      }).then(result => {
+        this.user = result.data.data
+      })
     },
     // 退出操作
     handleCommand (command) {
