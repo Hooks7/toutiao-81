@@ -21,11 +21,15 @@ export default new Router({
       path: '',
       component: Main
     },
-    {
-      // 评论列表
+    { // 评论列表
       path: '/home/comment',
-      component: () => import('./views/comment') }
+      component: () => import('./views/comment')
+    },
+    // 素材列表
+    { path: '/home/material',
+      component: () => import('./views/material')
 
+    }
     ]
   }
     // {
