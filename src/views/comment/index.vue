@@ -22,26 +22,51 @@
         </template>
       </el-table-column>
     </el-table>
+  <!-- 分页 -->
+    <el-row type="flex" justify="center" style="margin:20px 0;">
+      <el-pagination
+      :page-size="page.pageSize"
+      :total="page.total"
+      :current-page="page.currentpage"
+      @current-change ='changePage'
+      layout="prev, pager, next" ></el-pagination>
+    </el-row>
   </el-card>
 </template>
 
 <script>
+
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      page: {
+        pageSize: 10, // 单页显示条目个数
+        total: 0, // 总数
+        currentpage: 1 // 当前页数
+      }
     }
   },
   methods: {
+    // 分页事件
+    changePage (newPage) {
+      console.log(newPage)
+      this.page.currentpage = newPage
+      this.getcomments()
+    },
     //   查询评论列表数据
     getcomments () {
       this.$http({
         url: '/articles',
         params: {
-          response_type: 'comment'
+          response_type: 'comment',
+          page: this.page.currentpage, // 当前页数
+          per_page: this.page.pageSize // 每页条数
         }
       }).then(result => {
         this.list = result.data.results
+        // 设置分页总数
+        this.page.total = result.data.total_count
       })
     },
     // 状态设置
