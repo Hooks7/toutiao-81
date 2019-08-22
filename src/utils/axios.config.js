@@ -44,6 +44,6 @@ axios.interceptors.response.use(function (response) {
       message = '未知错误'
   }
   Message({ message, type: 'error' })
-  return new Promise()
+  return new Promise(function () {})
 })
 export default axios

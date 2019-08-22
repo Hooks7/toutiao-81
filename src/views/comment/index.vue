@@ -13,8 +13,13 @@
       <el-table-column prop="total_comment_count" label="总评论数"></el-table-column>
       <el-table-column prop="fans_comment_count" label="粉丝评论数"></el-table-column>
       <el-table-column label="操作">
-        <el-button type="text">修改</el-button>
-        <el-button type="text">关闭评论</el-button>
+        <template slot-scope="obj">
+          <el-button type="text">修改</el-button>
+          <el-button
+            type="text"
+            @click="closeOrOpen(obj.row)"
+          >{{obj.row.comment_status ?'关闭评论':'打开评论'}}</el-button>
+        </template>
       </el-table-column>
     </el-table>
   </el-card>
@@ -36,12 +41,26 @@ export default {
           response_type: 'comment'
         }
       }).then(result => {
-        console.log(result)
         this.list = result.data.results
       })
     },
+    // 状态设置
     formatter (row, column, callValue, index) {
       return callValue ? '正常' : '关闭'
+    },
+    // 关闭评论
+    closeOrOpen (row) {
+      let mess = row.comment_status ? '关闭' : '打开'
+      this.$confirm(`您确定要${mess}评论吗`, '提示').then(() => {
+        this.$http({
+          method: 'put',
+          url: 'comments/status',
+          params: { article_id: row.id },
+          data: { allow_comment: !row.comment_status }
+        }).then(() => {
+          this.getcomments()
+        })
+      })
     }
   },
   created () {
