@@ -1,5 +1,10 @@
 <template>
-  <el-card>
+  <el-card v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+
+    style="width: 100%">
     <el-breadcrumb separator=">">
       <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>
@@ -22,20 +27,21 @@
         </template>
       </el-table-column>
     </el-table>
-  <!-- 分页 -->
+    <!-- 分页 -->
     <el-row type="flex" justify="center" style="margin:20px 0;">
       <el-pagination
-      :page-size="page.pageSize"
-      :total="page.total"
-      :current-page="page.currentpage"
-      @current-change ='changePage'
-      layout="prev, pager, next" ></el-pagination>
+        :page-size="page.pageSize"
+        :total="page.total"
+        :current-page="page.currentpage"
+        @current-change="changePage"
+        background
+        layout="prev, pager, next"
+      ></el-pagination>
     </el-row>
   </el-card>
 </template>
 
 <script>
-
 export default {
   data () {
     return {
@@ -44,18 +50,21 @@ export default {
         pageSize: 10, // 单页显示条目个数
         total: 0, // 总数
         currentpage: 1 // 当前页数
-      }
+      },
+      // 加载效果
+      loading: true
     }
   },
   methods: {
     // 分页事件
     changePage (newPage) {
-      console.log(newPage)
+      // console.log(newPage)
       this.page.currentpage = newPage
       this.getcomments()
     },
     //   查询评论列表数据
     getcomments () {
+      this.loading = true
       this.$http({
         url: '/articles',
         params: {
@@ -67,6 +76,7 @@ export default {
         this.list = result.data.results
         // 设置分页总数
         this.page.total = result.data.total_count
+        this.loading = false
       })
     },
     // 状态设置
