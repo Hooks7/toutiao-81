@@ -26,9 +26,13 @@ export default new Router({
       component: () => import('./views/comment')
     },
     // 素材列表
-    { path: '/home/material',
+    {
+      path: '/home/material',
       component: () => import('./views/material')
-
+    },
+    {
+      path: '/home/articles',
+      component: () => import('./views/articles')
     }
     ]
   }
