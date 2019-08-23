@@ -1,10 +1,10 @@
 <template>
-  <el-card>
+  <el-card >
     <bread-crumb slot="header">
       <template slot="title">素材管理</template>
     </bread-crumb>
     <!-- 上传 -->
-    <el-upload :http-request="uploadImg" action='' :show-file-list="false" class="upload-material">
+    <el-upload :http-request="uploadImg" action :show-file-list="false" class="upload-material">
       <el-button type="primary">
         上传
         <i class="el-icon-upload el-icon--right"></i>
@@ -146,22 +146,23 @@ export default {
     margin: 20px 10px;
     position: relative;
     img {
-      width: 100%;
-      height: 100%;
+     width: 100%;
+      height: 140px;
     }
-    .operate {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      height: 30px;
-      width: 100%;
-      background-color: #f4f5f6;
-      i {
-        font-size: 22px;
-      }
+  }
+  .operate {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 30px;
+    width: 100%;
+    background-color: #f4f5f6;
+    i {
+      font-size: 22px;
     }
   }
 }
+
 .upload-material {
   position: absolute;
   right: 60px;
