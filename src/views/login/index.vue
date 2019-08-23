@@ -99,7 +99,7 @@ export default {
 .login {
   width: 100%;
   height: 100vh;
-  background-image: url("../../assets/img/12.jpg");
+  background-image: url("../../assets/img/001.jpg");
   background-size: cover; /* 图片可视区域最大展示*/
   display: flex;
   justify-content: center; /* 横向 居中*/

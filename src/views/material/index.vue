@@ -10,7 +10,8 @@
             <img :src="item.url" alt />
             <el-row align="middle" class="operate" type="flex" justify="space-around">
               <i class="el-icon-star-on"></i>
-              <i class="el-icon-delete"></i>
+              <!-- 删除 -->
+              <i @click="delMaterial(item)" class="el-icon-delete"></i>
             </el-row>
           </el-card>
         </div>
@@ -51,11 +52,24 @@ export default {
     }
   },
   methods: {
+    // 删除
+    delMaterial (item) {
+      this.$confirm('您确定删除此图片吗', '提示').then(() => {
+        this.$http({
+          method: 'delete',
+          url: `user/images/${item.id}`
+        }).then(result => {
+          // 重新获取数据
+          this.getMaterial()
+        })
+      })
+    },
     // 分页事件
     changePage (newPage) {
       this.page.currentPage = newPage
       this.getMaterial()
     },
+    // 切换功能
     changeTab () {
       this.getMaterial()
     },
