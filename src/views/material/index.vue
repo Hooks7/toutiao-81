@@ -3,6 +3,13 @@
     <bread-crumb slot="header">
       <template slot="title">素材管理</template>
     </bread-crumb>
+    <!-- 上传 -->
+    <el-upload :http-request="uploadImg" action='' :show-file-list="false" class="upload-material">
+      <el-button type="primary">
+        上传
+        <i class="el-icon-upload el-icon--right"></i>
+      </el-button>
+    </el-upload>
     <el-tabs v-model="tabPosition" @tab-click="changeTab">
       <el-tab-pane label="全部图片" name="all">
         <div class="img-list">
@@ -57,6 +64,18 @@ export default {
     }
   },
   methods: {
+    // 上传
+    uploadImg (a) {
+      let formData = new FormData()
+      formData.append('image', a.file)
+      this.$http({
+        method: 'post',
+        url: 'user/images',
+        data: formData
+      }).then(result => {
+        this.getMaterial()
+      })
+    },
     // 收藏操作
     collectOrCancel (item) {
       // is_collected  是否是收藏 如果is_collected为true  则表示已经收藏 这时点击时  应该取消
@@ -142,5 +161,10 @@ export default {
       }
     }
   }
+}
+.upload-material {
+  position: absolute;
+  right: 60px;
+  margin-top: -10px;
 }
 </style>
