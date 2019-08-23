@@ -9,7 +9,12 @@
           <el-card class="img-card" v-for="item in list" :key="item.id">
             <img :src="item.url" alt />
             <el-row align="middle" class="operate" type="flex" justify="space-around">
-              <i class="el-icon-star-on"></i>
+              <!-- 收藏事件 -->
+              <i
+                :style="{color:item.is_collected?'red':''}"
+                @click="collectOrCancel(item)"
+                class="el-icon-star-on"
+              ></i>
               <!-- 删除 -->
               <i @click="delMaterial(item)" class="el-icon-delete"></i>
             </el-row>
@@ -52,6 +57,21 @@ export default {
     }
   },
   methods: {
+    // 收藏操作
+    collectOrCancel (item) {
+      // is_collected  是否是收藏 如果is_collected为true  则表示已经收藏 这时点击时  应该取消
+      // 如果is_collected为false  则表示没有收藏 这时点击时  应该收藏\
+      let mess = item.is_collected ? '取消收藏' : '收藏'
+      this.$confirm(`您确定${mess}这张图片吗`).then(() => {
+        this.$http({
+          method: 'put',
+          url: `/user/images/${item.id}`,
+          data: { collect: !item.is_collected }
+        }).then(result => {
+          this.getMaterial()
+        })
+      })
+    },
     // 删除
     delMaterial (item) {
       this.$confirm('您确定删除此图片吗', '提示').then(() => {
@@ -71,6 +91,7 @@ export default {
     },
     // 切换功能
     changeTab () {
+      this.page.currentPage = 1
       this.getMaterial()
     },
     //   获取图片列表
