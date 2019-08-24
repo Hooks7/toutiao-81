@@ -30,9 +30,13 @@ export default new Router({
       path: '/home/material',
       component: () => import('./views/material')
     },
-    {
+    { // 内容列表
       path: '/home/articles',
       component: () => import('./views/articles')
+    },
+    { // 发布内容
+      path: '/home/publish',
+      component: () => import('./views/publish')
     }
     ]
   }
