@@ -55,12 +55,22 @@
           <span>
             <i class="el-icon-edit">修改</i>
           </span>
-          <span>
+          <span @click="deltem(item)" style='cursor:pointer'>
             <i class="el-icon-delete">删除</i>
           </span>
         </div>
       </div>
     </div>
+    <el-row class="compare">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :total="page.total"
+        :current-page="page.currentPage"
+        :page-size="page.pageSize"
+        @current-change="changePage"
+      ></el-pagination>
+    </el-row>
   </el-card>
 </template>
 
@@ -77,11 +87,14 @@ export default {
       channels: [], // 频道数据
       list: [], // 内容列表
       page: {
-        total: 0 // 文章总数
+        total: 0, // 文章总数
+        pageSzie: 10, // 每页条数
+        currentPage: 1 // 当前页
       }
     }
   },
   methods: {
+
     // 查询文章
     getArticles (params) {
       this.$http({
@@ -92,15 +105,8 @@ export default {
         this.page.total = result.data.total_count
       })
     },
-    getChannels () {
-      this.$http({
-        url: 'channels'
-      }).then(result => {
-        this.channels = result.data.channels
-      })
-    },
-    // 筛选
-    refreshList () {
+    // 封装
+    getConditions () {
       let { status, channel_id: cid, dateRange } = this.formData // 解构赋值
       let params = {
         status: status === 5 ? null : status,
@@ -108,7 +114,30 @@ export default {
         begin_pubdate: dateRange && dateRange.length ? dateRange[0] : null,
         end_pubdate: dateRange && dateRange.length > 1 ? dateRange[1] : null
       }
-      this.getArticles(params)
+      params.page = this.page.currentPage
+      params.por_page = this.page.pageSzie
+      return params
+    },
+    getChannels () {
+      this.$http({
+        url: 'channels'
+      }).then(result => {
+        this.channels = result.data.channels
+      })
+    },
+    // 分页事件
+    changePage (newPage) {
+      // this.page.currentPage = newPage
+      // let conditions = this.getConditions()
+      // conditions.page = this.page.currentPage // 改变请求所需 参数  获取最新野马
+      // conditions.per_page = this.page.pageSzie // 每页条数
+      this.getArticles(this.getConditions()) // 携带参数
+    },
+    // 筛选
+    refreshList () {
+      // 筛选条件改变时回到第一页
+      this.page.currentPage = 1
+      this.getArticles(this.getConditions())
       // this.$http({
       //   url: 'articles',
       //   params: {
@@ -127,7 +156,18 @@ export default {
       //   this.list = result.data.results
       //   this.page.total = result.data.total_count
       // })
+    },
+    deltem (item) {
+      this.$confirm('您确定删除此条文章?', '提示').then(() => {
+        this.$http({
+          method: 'delete',
+          url: `/articles/${item.id.toString()}`
+        }).then(() => {
+          this.getArticles(this.getConditions())
+        })
+      })
     }
+
   },
   // 过滤器
   filters: {
@@ -157,9 +197,8 @@ export default {
     }
   },
   created () {
-    this.getArticles() // 获取文章列表
+    this.getArticles({ page: 1, per_page: 10 }) // 获取文章列表
     this.getChannels() // 获取频道列表
-    this.refreshList()
   }
 }
 </script>
@@ -208,5 +247,10 @@ export default {
       }
     }
   }
+}
+
+.compare {
+  display: flex;
+  justify-content: center;
 }
 </style>
