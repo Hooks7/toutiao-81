@@ -29,7 +29,7 @@
         <div class="block">
           <span class="demonstration"></span>
           <el-date-picker
-            v-model="value1"
+            v-model="value"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -38,18 +38,18 @@
         </div>
       </el-form-item>
     </el-form>
-    <div class="total_title">共找到53772条符合条件的内容</div>
+    <div class="total_title">共找到{{page.total}}条符合条件的内容</div>
     <div class="content-list">
       <!-- 循环项 -->
       <div class="content-item" v-for="(item,index) in list" :key="index">
         <!-- 左侧内容 -->
         <div class="left">
-          <img src="../../assets//img/reply.png" alt />
+          <img :src="item.cover.images[0]" alt />
           <!-- 内容信息 -->
           <div class="info">
-            <span>我是内容标题</span>
-            <el-tag type="success" class="button">标签二</el-tag>
-            <span class="date">2019-08-22 17:21:31</span>
+            <span>{{item.title}}</span>
+            <el-tag :type="item.status|statusType" class="button">{{item.status|statusText}}</el-tag>
+            <span class="date">{{item.pubdate}}</span>
           </div>
         </div>
         <!-- 右侧内容 -->
@@ -72,8 +72,52 @@ export default {
     return {
       radio: 1,
       value: '',
-      list: [1, 2, 3, 4]
+      list: [],
+      page: {
+        total: ''
+      }
     }
+  },
+  methods: {
+    // 查询文章
+    getArticles () {
+      this.$http({
+        url: 'articles'
+      }).then(result => {
+        this.list = result.data.results
+        this.page.total = result.data.total_count
+      })
+    }
+  },
+  // 过滤器
+  filters: {
+    statusText (value) {
+      switch (value) {
+        case 0:
+          return '草稿'
+        case 2:
+          return '已发表'
+        case 3:
+          return '审核失败'
+        case 4:
+          return '已删除'
+      }
+    },
+    statusType (value) {
+      switch (value) {
+        case 0:
+          return 'warning'
+        case 2:
+          return 'sucess'
+        case 3:
+          return 'danger'
+        case 4:
+          return 'info'
+      }
+    }
+  },
+  created () {
+    this.getArticles()
   }
 }
 </script>
@@ -114,11 +158,11 @@ export default {
         font-size: 12px;
       }
     }
-    .right{
+    .right {
       display: flex;
       align-items: center;
-      span{
-        padding: 0 10px
+      span {
+        padding: 0 10px;
       }
     }
   }
