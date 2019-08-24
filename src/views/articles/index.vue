@@ -83,9 +83,10 @@ export default {
   },
   methods: {
     // 查询文章
-    getArticles () {
+    getArticles (params) {
       this.$http({
-        url: 'articles'
+        url: 'articles',
+        params: { ...params }
       }).then(result => {
         this.list = result.data.results
         this.page.total = result.data.total_count
@@ -100,23 +101,32 @@ export default {
     },
     // 筛选
     refreshList () {
-      this.$http({
-        url: 'articles',
-        params: {
-          status: this.formData.status === 5 ? null : this.formData.status,
-          channel_id: this.formData.channel_id,
-          begin_pubdate:
-            this.formData.dateRange && this.formData.dateRange.length
-              ? this.formData.dateRange[0]
-              : null,
-          end_pubdate:
-            this.formData.dateRange && this.formData.dateRange.length > 1
-              ? this.formData.dateRange[1] : null
-        }
-      }).then(result => {
-        this.list = result.data.results
-        this.page.total = result.data.total_count
-      })
+      let { status, channel_id: cid, dateRange } = this.formData // 解构赋值
+      let params = {
+        status: status === 5 ? null : status,
+        channel_id: cid,
+        begin_pubdate: dateRange && dateRange.length ? dateRange[0] : null,
+        end_pubdate: dateRange && dateRange.length > 1 ? dateRange[1] : null
+      }
+      this.getArticles(params)
+      // this.$http({
+      //   url: 'articles',
+      //   params: {
+      //     status: this.formData.status === 5 ? null : this.formData.status,
+      //     channel_id: this.formData.channel_id,
+      //     begin_pubdate:
+      //       this.formData.dateRange && this.formData.dateRange.length
+      //         ? this.formData.dateRange[0]
+      //         : null,
+      //     end_pubdate:
+      //       this.formData.dateRange && this.formData.dateRange.length > 1
+      //         ? this.formData.dateRange[1]
+      //         : null
+      //   }
+      // }).then(result => {
+      //   this.list = result.data.results
+      //   this.page.total = result.data.total_count
+      // })
     }
   },
   // 过滤器
