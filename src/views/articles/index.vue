@@ -6,30 +6,28 @@
     <!-- 表单 -->
     <el-form>
       <el-form-item label="文章状态">
-        <el-radio-group v-model="radio">
-          <el-radio-button label="全部"></el-radio-button>
-          <el-radio-button label="草稿"></el-radio-button>
-          <el-radio-button label="待审核"></el-radio-button>
-          <el-radio-button label="审核通过"></el-radio-button>
-          <el-radio-button label="审核失败"></el-radio-button>
+        <el-radio-group v-model="formData.status" @change="refreshList">
+          <el-radio-button :label="5">全部</el-radio-button>
+          <el-radio-button :label="0">草稿</el-radio-button>
+          <el-radio-button :label="1">待审核</el-radio-button>
+          <el-radio-button :label="2">审核通过</el-radio-button>
+          <el-radio-button :label="3">审核失败</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="频道列表">
-        <el-dropdown>
-          <el-button type="primary">
-            请选择
-            <i class="el-icon-arrow-down el-icon--right"></i>
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>黄金糕</el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+        <!-- 下拉 -->
+        <el-select v-model="formData.channel_id" placeholder="请选择" @change="refreshList">
+          <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
+        </el-select>
       </el-form-item>
+      <!-- 时间选择 -->
       <el-form-item label="时间选择">
         <div class="block">
           <span class="demonstration"></span>
           <el-date-picker
-            v-model="value"
+            v-model="formData.dateRange"
+            @change="refreshList"
+            value-format="yyyy-MM-dd"
             type="datetimerange"
             range-separator="至"
             start-placeholder="开始日期"
@@ -44,7 +42,7 @@
       <div class="content-item" v-for="(item,index) in list" :key="index">
         <!-- 左侧内容 -->
         <div class="left">
-          <img :src="item.cover.images[0]" alt />
+          <img :src="item.cover.images[0]?item.cover.images[0]:defaultImg" alt />
           <!-- 内容信息 -->
           <div class="info">
             <span>{{item.title}}</span>
@@ -70,11 +68,16 @@
 export default {
   data () {
     return {
-      radio: 1,
-      value: '',
-      list: [],
+      formData: {
+        status: 5,
+        channel_id: null, // 频道id 当前选择的频道
+        dateRange: null // 时间范围 是个数组
+      },
+      defaultImg: require('../../assets/img/toutiao.png'), // 默认图片设置
+      channels: [], // 频道数据
+      list: [], // 内容列表
       page: {
-        total: ''
+        total: 0 // 文章总数
       }
     }
   },
@@ -83,6 +86,33 @@ export default {
     getArticles () {
       this.$http({
         url: 'articles'
+      }).then(result => {
+        this.list = result.data.results
+        this.page.total = result.data.total_count
+      })
+    },
+    getChannels () {
+      this.$http({
+        url: 'channels'
+      }).then(result => {
+        this.channels = result.data.channels
+      })
+    },
+    // 筛选
+    refreshList () {
+      this.$http({
+        url: 'articles',
+        params: {
+          status: this.formData.status === 5 ? null : this.formData.status,
+          channel_id: this.formData.channel_id,
+          begin_pubdate:
+            this.formData.dateRange && this.formData.dateRange.length
+              ? this.formData.dateRange[0]
+              : null,
+          end_pubdate:
+            this.formData.dateRange && this.formData.dateRange.length > 1
+              ? this.formData.dateRange[1] : null
+        }
       }).then(result => {
         this.list = result.data.results
         this.page.total = result.data.total_count
@@ -117,7 +147,9 @@ export default {
     }
   },
   created () {
-    this.getArticles()
+    this.getArticles() // 获取文章列表
+    this.getChannels() // 获取频道列表
+    this.refreshList()
   }
 }
 </script>
