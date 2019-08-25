@@ -127,7 +127,7 @@ export default {
     },
     // 分页事件
     changePage (newPage) {
-      // this.page.currentPage = newPage
+      this.page.currentPage = newPage
       // let conditions = this.getConditions()
       // conditions.page = this.page.currentPage // 改变请求所需 参数  获取最新野马
       // conditions.per_page = this.page.pageSzie // 每页条数
