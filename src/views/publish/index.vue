@@ -62,15 +62,27 @@ export default {
     publish (draft) {
       this.$refs.myForm.validate(isOk => {
         if (isOk) {
+          let { articleId } = this.$route.params// 接受id
+          let method = articleId ? 'put' : 'post'// 根据id判断是新增还有修改
+          let url = articleId ? `/articles/${articleId}` : 'articles' // 根据id判断当前请求地址
           this.$http({
-            method: 'post',
-            url: 'articles',
+            method,
+            url,
             params: { draft }, // 是否存在草稿
             data: this.formData
           }).then(result => {
             this.$router.push('/home/articles')
           })
         }
+      })
+    },
+    // 修改内容
+    getArticleById () {
+      let{ articleId } = this.$route.params // 接受内容列表修改传来的id
+      this.$http({
+        url: `/articles/${articleId}`
+      }).then(result => {
+        this.formData = result.data // 将文章数据传入进行绑定
       })
     },
     // 获取频道列表
@@ -80,15 +92,8 @@ export default {
       }).then(result => {
         this.channels = result.data.channels
       })
-    },
-    getArticleById () {
-      let{ articleId } = this.$route.params // 接受内容列表修改传来的id
-      this.$http({
-        url: `/articles/${articleId}`
-      }).then(result => {
-        this.formData = result.data // 将文章数据传入进行绑定
-      })
     }
+
   },
   created () {
     let { articleId } = this.$route.params

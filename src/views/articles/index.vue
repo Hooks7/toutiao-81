@@ -94,6 +94,7 @@ export default {
     }
   },
   methods: {
+    // 传id
     goEdit (item) {
       this.$router.push(`/home/publish/${item.id.toString()}`)
     },
