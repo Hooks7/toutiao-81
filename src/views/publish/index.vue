@@ -67,7 +67,9 @@ export default {
             url: 'articles',
             params: { draft }, // 是否存在草稿
             data: this.formData
-          }).then(result => {})
+          }).then(result => {
+            this.$router.push('/home/articles')
+          })
         }
       })
     },
@@ -78,10 +80,21 @@ export default {
       }).then(result => {
         this.channels = result.data.channels
       })
+    },
+    getArticleById () {
+      let{ articleId } = this.$route.params // 接受内容列表修改传来的id
+      this.$http({
+        url: `/articles/${articleId}`
+      }).then(result => {
+        this.formData = result.data // 将文章数据传入进行绑定
+      })
     }
   },
   created () {
-    this.getChannels()
+    let { articleId } = this.$route.params
+
+    articleId && this.getArticleById() // 编辑频道
+    this.getChannels() // 获取频道
   }
 }
 </script>
