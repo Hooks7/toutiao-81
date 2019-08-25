@@ -52,7 +52,7 @@
         </div>
         <!-- 右侧内容 -->
         <div class="right">
-          <span>
+          <span @click="goEdit(item)">
             <i class="el-icon-edit">修改</i>
           </span>
           <span @click="deltem(item)" style='cursor:pointer'>
@@ -94,7 +94,9 @@ export default {
     }
   },
   methods: {
-
+    goEdit (item) {
+      this.$router.push(`/home/publish/${item.id.toString()}`)
+    },
     // 查询文章
     getArticles (params) {
       this.$http({

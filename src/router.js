@@ -37,6 +37,10 @@ export default new Router({
     { // 发布内容
       path: '/home/publish',
       component: () => import('./views/publish')
+    },
+    { // 发布内容 动态路由
+      path: '/home/publish/:articleId',
+      component: () => import('./views/publish')
     }
     ]
   }
