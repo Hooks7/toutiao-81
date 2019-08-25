@@ -5,6 +5,7 @@ import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import coverImg from '../views/publish/cover-image'
+import selectImg from '../views/publish/select-images'
 
 import { quillEditor } from 'vue-quill-editor'
 
@@ -17,6 +18,7 @@ export default {
     Vue.component('layout-header', layoutHeader) // 注册左侧菜单组件
     Vue.component('bread-crumb', breadCrumb) // 注册面包屑组件
     Vue.component('quill-editor', quillEditor) // 富文本编辑器
-    Vue.component('cover-image', coverImg)
+    Vue.component('cover-image', coverImg) // 发布子组件1
+    Vue.component('select-images', selectImg) // 发布子组件2
   }
 }

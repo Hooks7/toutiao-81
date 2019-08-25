@@ -8,7 +8,12 @@
         <el-input placeholder="请输入内容" style="width:400px" v-model="formData.title"></el-input>
       </el-form-item>
       <el-form-item prop="content" label="内容">
-        <quill-editor style='width:800px;height:400px;margin-bottom:100px' placeholder="请输入内容" type="textarea"  v-model="formData.content"></quill-editor>
+        <quill-editor
+          style="width:800px;height:400px;margin-bottom:100px"
+          placeholder="请输入内容"
+          type="textarea"
+          v-model="formData.content"
+        ></quill-editor>
       </el-form-item>
       <el-form-item label="封面">
         <el-radio-group v-model="formData.cover.type" @change="changeType">
@@ -21,7 +26,8 @@
       <!-- 父组件给子组件传值  props 封面图片-->
       <el-form-item>
         <!-- 子组件 -->
-         <cover-image :images='formData.cover.images'></cover-image>
+        <cover-image @updateImages="updateImages" :images="formData.cover.images"></cover-image>
+        <!-- 接受子传父 -->
       </el-form-item>
       <el-form-item label="频道" prop="channel_id">
         <el-select v-model="formData.channel_id">
@@ -30,7 +36,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="info" plain @click="publish(false)">发布</el-button>
-        <el-button @click='publish(true)'>存入草稿</el-button>
+        <el-button @click="publish(true)">存入草稿</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -51,18 +57,33 @@ export default {
         }
       },
       rules: {
-        title: [{ required: true, message: '请输入内容', tigger: 'blur' },
+        title: [
+          { required: true, message: '请输入内容', tigger: 'blur' },
           {
             min: 5,
             max: 30,
             message: '标题内容必须在5到30个字符之间'
-          }],
+          }
+        ],
         content: [{ required: true, message: '文章内容不能为空' }],
         channel_id: [{ required: true, message: '频道不能为空' }]
       }
     }
   },
   methods: {
+    // 传过来的参数
+    updateImages (url, index) {
+      // 数据改变视图
+      this.formData.cover.images = this.formData.cover.images.map((item, i) => {
+        // if (i === index) {
+        //   // 更新某条数据
+        //   return url
+        // }
+        // return item
+        console.log(item)
+        return i === index ? url : item
+      })
+    },
     changeType () {
       // 获取最新数据类型
       // 根据type属性改变imgaes属性
@@ -78,8 +99,8 @@ export default {
     publish (draft) {
       this.$refs.myForm.validate(isOk => {
         if (isOk) {
-          let { articleId } = this.$route.params// 接受id
-          let method = articleId ? 'put' : 'post'// 根据id判断是新增还有修改
+          let { articleId } = this.$route.params // 接受id
+          let method = articleId ? 'put' : 'post' // 根据id判断是新增还有修改
           let url = articleId ? `/articles/${articleId}` : 'articles' // 根据id判断当前请求地址
           this.$http({
             method,
@@ -94,7 +115,7 @@ export default {
     },
     // 修改内容
     getArticleById () {
-      let{ articleId } = this.$route.params // 接受内容列表修改传来的id
+      let { articleId } = this.$route.params // 接受内容列表修改传来的id
       this.$http({
         url: `/articles/${articleId}`
       }).then(result => {
@@ -109,7 +130,6 @@ export default {
         this.channels = result.data.channels
       })
     }
-
   },
   created () {
     let { articleId } = this.$route.params
