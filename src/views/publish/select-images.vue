@@ -20,7 +20,11 @@
           ></el-pagination>
         </el-row>
       </el-tab-pane>
-      <el-tab-pane label="全部上传"></el-tab-pane>
+      <el-tab-pane label="上传图片">
+        <el-upload :show-file-list="false" :http-request="uploadImg" action>
+          <i class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </el-tab-pane>
     </el-tabs>
   </el-card>
 </template>
@@ -39,26 +43,42 @@ export default {
     }
   },
   methods: {
+    //  上传图片
+    uploadImg (params) {
+      let data = new FormData()
+      data.append('image', params.file) // 上传参数
+      this.$http({
+        url: '/user/images',
+        data,
+        method: 'post'
+      }).then(result => {
+        this.$emit('selectOneImg', result.data.url)
+      })
+    },
+    // 图片点击
+    selectOneImg (item) {
+      this.$emit('selectOneImg', item.url)
+    },
     //   获取图片数据
     getMaterial () {
-      let pageParams = { page: this.page.currentPage, per_page: this.page.pageSize }
+      let pageParams = {
+        page: this.page.currentPage,
+        per_page: this.page.pageSize
+      }
       this.$http({
         url: '/user/images',
         params: { collect: false, ...pageParams }
       }).then(result => {
         this.list = result.data.results
-        this.page.total = result.data.total_count// 分页总数
+        this.page.total = result.data.total_count // 分页总数
       })
     },
     // 分页
     changePage (newPage) {
       this.page.currentPage = newPage
       this.getMaterial()
-    },
-    // 图片点击
-    selectOneImg (item) {
-      this.$emit('selectOneImg', item.url)
     }
+
   },
   created () {
     this.getMaterial()
@@ -80,5 +100,28 @@ export default {
       height: 100px;
     }
   }
+}
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409eff;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
 }
 </style>
