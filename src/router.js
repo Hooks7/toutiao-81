@@ -49,6 +49,10 @@ export default new Router({
     {
       path: '/home/fansdata',
       component: () => import('./views/fansdata')
+    },
+    {
+      path: '*',
+      component: () => import('./views/404.vue')
     }
     ]
   }
