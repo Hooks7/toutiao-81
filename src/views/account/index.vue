@@ -25,13 +25,15 @@
         <el-button type="primary" @click="saveUserInfo">保存信息</el-button>
       </el-form-item>
     </el-form>
-    <el-upload :http-request="uploadImg" action :show-file-list="false" >
+    <el-upload :http-request="uploadImg" action :show-file-list="false">
       <img class="head-img" :src="formData.photo" alt />
     </el-upload>
   </el-card>
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
+
 export default {
   data () {
     return {
@@ -45,7 +47,7 @@ export default {
       rules: {
         name: [
           { required: true, message: '用户名称不能为空' },
-          { min: 2, max: 10, message: '用户名称必须控制在2到10个字符' }
+          { min: 1, max: 7, message: '用户名称必须控制在2到10个字符' }
         ],
         email: [
           { required: true, message: '邮箱不能为空' },
@@ -80,9 +82,15 @@ export default {
     async uploadImg (params) {
       let data = new FormData()
       data.append('photo', params.file)
-      let result = await this.$http({ url: 'user/photo', method: 'patch', data })
+      let result = await this.$http({
+        url: 'user/photo',
+        method: 'patch',
+        data
+      })
       this.formData.photo = result.data.photo
+      eventBus.$emit('updateUserInfoSuccess') // 触发
     }
+
   },
   created () {
     this.getUserInfo()

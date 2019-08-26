@@ -1,5 +1,5 @@
 <template>
-  <el-row type="flex" class="layout-header" >
+  <el-row type="flex" class="layout-header">
     <el-col :span="21" class="left-header">
       <i class="el-icon-s-night"></i>
       <span>上海香蕉计划文化发展有限公司</span>
@@ -8,15 +8,15 @@
       <!-- 图片设置 -->
       <img :src="user.photo ? user.photo :defaultImg" alt />
       <!-- 下拉模板 -->
-      <el-dropdown trigger="click" @command=' handleCommand '>
+      <el-dropdown trigger="click" @command=" handleCommand ">
         <span class="el-dropdown-link">
           {{user.name}}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command='account'>个人信息</el-dropdown-item>
-          <el-dropdown-item command='git'>git地址</el-dropdown-item>
-          <el-dropdown-item command='out'>退出</el-dropdown-item>
+          <el-dropdown-item command="account">个人信息</el-dropdown-item>
+          <el-dropdown-item command="git">git地址</el-dropdown-item>
+          <el-dropdown-item command="out">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-col>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
 export default {
   data () {
     return {
@@ -54,7 +55,8 @@ export default {
       } else if (command === 'git') {
         window.location.href = 'https://github.com'
         // 退出
-      } else { //
+      } else {
+        //
         this.$router.push('/login')
         window.localStorage.clear() // 清除本地在游览器上所有前端缓存
       }
@@ -62,6 +64,9 @@ export default {
   },
   created () {
     this.getUserInfo()
+    eventBus.$on('updateUserInfoSuccess', () => {
+      this.getUserInfo()
+    })
   }
 }
 </script>
