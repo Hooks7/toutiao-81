@@ -25,7 +25,9 @@
         <el-button type="primary" @click="saveUserInfo">保存信息</el-button>
       </el-form-item>
     </el-form>
-    <img class="head-img" :src="formData.photo" alt />
+    <el-upload :http-request="uploadImg" action :show-file-list="false" >
+      <img class="head-img" :src="formData.photo" alt />
+    </el-upload>
   </el-card>
 </template>
 
@@ -73,6 +75,13 @@ export default {
           this.$message({ message: '保存成功', type: 'success' })
         }
       })
+    },
+    // 图片上传
+    async uploadImg (params) {
+      let data = new FormData()
+      data.append('photo', params.file)
+      let result = await this.$http({ url: 'user/photo', method: 'patch', data })
+      this.formData.photo = result.data.photo
     }
   },
   created () {
