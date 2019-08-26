@@ -41,6 +41,14 @@ export default new Router({
     { // 发布内容 动态路由
       path: '/home/publish/:articleId',
       component: () => import('./views/publish')
+    },
+    {
+      path: '/home/account', // 账户信息
+      component: () => import('./views/account')
+    },
+    {
+      path: '/home/fansdata',
+      component: () => import('./views/fansdata')
     }
     ]
   }

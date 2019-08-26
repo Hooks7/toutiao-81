@@ -35,7 +35,7 @@
         <el-menu-item index="/home/fansdata">图文数据</el-menu-item>
         <el-menu-item index="/home/fansinfo">粉丝概况</el-menu-item>
         <el-menu-item index="/home/fansimg">粉丝画像</el-menu-item>
-        <el-menu-item index="/home/fanslist">账户信息</el-menu-item>
+        <el-menu-item index="/home/account">账户信息</el-menu-item>
       </el-submenu>
       <!-- 账户信息 -->
       <el-menu-item index="/home/account">
