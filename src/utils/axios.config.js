@@ -49,6 +49,9 @@ axios.interceptors.response.use(function (response) {
       window.localStorage.clear() // 清楚缓存
       window.localStorage.hash('#/login') // 跳转到登录页
       break
+    case 409:
+      message = '用户名已存在'
+      break
     default :
       message = '未知错误'
   }
