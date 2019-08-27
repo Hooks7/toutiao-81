@@ -1,7 +1,7 @@
 <template>
   <el-row type="flex" class="layout-header">
     <el-col :span="21" class="left-header">
-      <i class="el-icon-s-night"></i>
+      <i @click="openOrClose" :class="currentClass"></i>
       <span>上海香蕉计划文化发展有限公司</span>
     </el-col>
     <el-col :span="3" class="layout-right">
@@ -29,10 +29,17 @@ export default {
   data () {
     return {
       user: {},
-      defaultImg: require('../../assets/img/avatar.jpg')
+      defaultImg: require('../../assets/img/avatar.jpg'),
+      currentClass: 'el-icon-s-fold'
     }
   },
   methods: {
+
+    // 侧边栏伸缩
+    openOrClose () {
+      eventBus.$emit('collopseOrClose') // 触发了一个事件 打开或者
+      this.currentClass = this.currentClass === 'el-icon-s-fold' ? 'el-icon-s-unfold' : 'el-icon-s-fold'
+    },
     // 获取用户信息
     getUserInfo () {
       // let userInfo = window.localStorage.getItem('user-info') // 获取用户存储信息 存储信息没有token

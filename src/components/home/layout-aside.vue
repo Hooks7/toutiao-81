@@ -1,13 +1,15 @@
 <template>
   <div class="layout-aside">
     <div class="title">
-      <img src="../../assets/img/logo_admin.png" alt />
+      <img src="../../assets/img/logo_admin.png" :style = "{width:collapse?'200px': '120px'}" alt />
     </div>
     <el-menu
       class="el-menu-vertical-demo"
       background-color="#353b4e"
       text-color="#ccc"
       active-text-color="#ffd04b"
+      :collapse="collapse"
+      :collapse-transition = 'false'
       router>
 <!-- 开启路由 -->
       <!-- 内容一 -->
@@ -47,9 +49,18 @@
 </template>
 
 <script>
+import eventBus from '../../utils/eventBus'
 export default {
-  comments: {
+  data () {
+    return {
+      collapse: false
 
+    }
+  },
+  created () {
+    eventBus.$on('collopseOrClose', () => {
+      this.collapse = !this.collapse
+    })
   }
 }
 </script>
