@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { LoginByMobile } from '../../api/login'
 export default {
   methods: {
     login () {
@@ -31,7 +32,7 @@ export default {
       // 要进行手机号和验证码的校验 validate手动校验表单数据
       this.$refs.form.validate(async isOk => {
         if (isOk) {
-          let result = await this.$http.post('/authorizations', this.formData)
+          let result = await LoginByMobile(this.formData)
           window.localStorage.setItem('user-info', JSON.stringify(result.data))
           this.$router.push('/home')
         }
