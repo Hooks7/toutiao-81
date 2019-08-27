@@ -99,14 +99,13 @@ export default {
       this.$router.push(`/home/publish/${item.id.toString()}`)
     },
     // 查询文章
-    getArticles (params) {
-      this.$http({
+    async  getArticles (params) {
+      let result = await this.$http({
         url: 'articles',
         params: { ...params }
-      }).then(result => {
-        this.list = result.data.results
-        this.page.total = result.data.total_count
       })
+      this.list = result.data.results
+      this.page.total = result.data.total_count
     },
     // 封装
     getConditions () {
@@ -121,12 +120,11 @@ export default {
       params.por_page = this.page.pageSzie
       return params
     },
-    getChannels () {
-      this.$http({
+    async  getChannels () {
+      let result = await this.$http({
         url: 'channels'
-      }).then(result => {
-        this.channels = result.data.channels
       })
+      this.channels = result.data.channels
     },
     // 分页事件
     changePage (newPage) {
@@ -160,15 +158,13 @@ export default {
       //   this.page.total = result.data.total_count
       // })
     },
-    deltem (item) {
-      this.$confirm('您确定删除此条文章?', '提示').then(() => {
-        this.$http({
-          method: 'delete',
-          url: `/articles/${item.id.toString()}`
-        }).then(() => {
-          this.getArticles(this.getConditions())
-        })
+    async deltem (item) {
+      await this.$confirm('您确定删除此条文章?', '提示')
+      await this.$http({
+        method: 'delete',
+        url: `/articles/${item.id.toString()}`
       })
+      this.getArticles(this.getConditions())
     }
 
   },

@@ -29,17 +29,11 @@ export default {
     login () {
       // 登录方法
       // 要进行手机号和验证码的校验 validate手动校验表单数据
-      this.$refs.form.validate(isOk => {
+      this.$refs.form.validate(async isOk => {
         if (isOk) {
-          this.$http
-            .post('/authorizations', this.formData)
-            .then(result => {
-              window.localStorage.setItem(
-                'user-info',
-                JSON.stringify(result.data)
-              )
-              this.$router.push('/home')
-            })
+          let result = await this.$http.post('/authorizations', this.formData)
+          window.localStorage.setItem('user-info', JSON.stringify(result.data))
+          this.$router.push('/home')
         }
       })
     }

@@ -77,31 +77,26 @@ export default {
       })
     },
     // 收藏操作
-    collectOrCancel (item) {
+    async  collectOrCancel (item) {
       // is_collected  是否是收藏 如果is_collected为true  则表示已经收藏 这时点击时  应该取消
       // 如果is_collected为false  则表示没有收藏 这时点击时  应该收藏\
       let mess = item.is_collected ? '取消收藏' : '收藏'
-      this.$confirm(`您确定${mess}这张图片吗`).then(() => {
-        this.$http({
-          method: 'put',
-          url: `/user/images/${item.id}`,
-          data: { collect: !item.is_collected }
-        }).then(result => {
-          this.getMaterial()
-        })
+      await this.$confirm(`您确定${mess}这张图片吗`)
+      await this.$http({
+        method: 'put',
+        url: `/user/images/${item.id}`,
+        data: { collect: !item.is_collected }
       })
+      this.getMaterial()
     },
     // 删除
-    delMaterial (item) {
-      this.$confirm('您确定删除此图片吗', '提示').then(() => {
-        this.$http({
-          method: 'delete',
-          url: `user/images/${item.id}`
-        }).then(result => {
-          // 重新获取数据
-          this.getMaterial()
-        })
+    async  delMaterial (item) {
+      await this.$confirm('您确定删除此图片吗', '提示')
+      await this.$http({
+        method: 'delete',
+        url: `user/images/${item.id}`
       })
+      this.getMaterial()
     },
     // 分页事件
     changePage (newPage) {
@@ -114,19 +109,18 @@ export default {
       this.getMaterial()
     },
     //   获取图片列表
-    getMaterial () {
+    async  getMaterial () {
       let pageParams = {
         page: this.page.currentPage,
         per_page: this.page.pageSize
       }
-      this.$http({
+      let result = await this.$http({
         url: 'user/images',
         params: { collect: this.tabPosition === 'collect', ...pageParams }
-      }).then(result => {
-        // console.log(result.data)
-        this.list = result.data.results
-        this.page.total = result.data.total_count
       })
+      // console.log(result.data)
+      this.list = result.data.results
+      this.page.total = result.data.total_count
     }
   },
   created () {

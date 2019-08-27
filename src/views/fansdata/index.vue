@@ -218,5 +218,7 @@ export default {
    .lineChart {
        width: 700px;
        height: 380px;
+       margin-left: 50px
+
    }
 </style>

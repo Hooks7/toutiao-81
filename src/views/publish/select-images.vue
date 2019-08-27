@@ -44,34 +44,32 @@ export default {
   },
   methods: {
     //  上传图片
-    uploadImg (params) {
+    async uploadImg (params) {
       let data = new FormData()
       data.append('image', params.file) // 上传参数
-      this.$http({
+      let result = await this.$http({
         url: '/user/images',
         data,
         method: 'post'
-      }).then(result => {
-        this.$emit('selectOneImg', result.data.url)
       })
+      this.$emit('selectOneImg', result.data.url)
     },
     // 图片点击
     selectOneImg (item) {
       this.$emit('selectOneImg', item.url)
     },
     //   获取图片数据
-    getMaterial () {
+    async getMaterial () {
       let pageParams = {
         page: this.page.currentPage,
         per_page: this.page.pageSize
       }
-      this.$http({
+      let result = await this.$http({
         url: '/user/images',
         params: { collect: false, ...pageParams }
-      }).then(result => {
-        this.list = result.data.results
-        this.page.total = result.data.total_count // 分页总数
       })
+      this.list = result.data.results
+      this.page.total = result.data.total_count // 分页总数
     },
     // 分页
     changePage (newPage) {

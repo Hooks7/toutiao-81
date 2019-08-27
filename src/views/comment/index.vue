@@ -63,39 +63,36 @@ export default {
       this.getcomments()
     },
     //   查询评论列表数据
-    getcomments () {
+    async  getcomments () {
       this.loading = true
-      this.$http({
+      let result = await this.$http({
         url: '/articles',
         params: {
           response_type: 'comment',
           page: this.page.currentpage, // 当前页数
           per_page: this.page.pageSize // 每页条数
         }
-      }).then(result => {
-        this.list = result.data.results
-        // 设置分页总数
-        this.page.total = result.data.total_count
-        this.loading = false
       })
+      this.list = result.data.results
+      // 设置分页总数
+      this.page.total = result.data.total_count
+      this.loading = false
     },
     // 状态设置
     formatter (row, column, callValue, index) {
       return callValue ? '正常' : '关闭'
     },
     // 关闭评论
-    closeOrOpen (row) {
+    async closeOrOpen (row) {
       let mess = row.comment_status ? '关闭' : '打开'
-      this.$confirm(`您确定要${mess}评论吗`, '提示').then(() => {
-        this.$http({
-          method: 'put',
-          url: 'comments/status',
-          params: { article_id: row.id.toString() },
-          data: { allow_comment: !row.comment_status }
-        }).then(() => {
-          this.getcomments()
-        })
+      await this.$confirm(`您确定要${mess}评论吗`, '提示')
+      await this.$http({
+        method: 'put',
+        url: 'comments/status',
+        params: { article_id: row.id.toString() },
+        data: { allow_comment: !row.comment_status }
       })
+      this.getcomments()
     }
   },
   created () {
