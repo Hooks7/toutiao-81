@@ -1,8 +1,13 @@
 <template>
   <el-row type="flex" class="layout-header">
-    <el-col :span="21" class="left-header">
+    <el-col :span="17" class="left-header">
       <i @click="openOrClose" :class="currentClass"></i>
       <span>上海香蕉计划文化发展有限公司</span>
+    </el-col>
+    <el-col :span="4">
+      <!-- 搜索框 -->
+      <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="seek"
+     @blur='hunt'></el-input>
     </el-col>
     <el-col :span="3" class="layout-right">
       <!-- 图片设置 -->
@@ -30,15 +35,18 @@ export default {
     return {
       user: {},
       defaultImg: require('../../assets/img/avatar.jpg'),
-      currentClass: 'el-icon-s-fold'
+      currentClass: 'el-icon-s-fold',
+      seek: ''
     }
   },
   methods: {
-
     // 侧边栏伸缩
     openOrClose () {
       eventBus.$emit('collopseOrClose') // 触发了一个事件 打开或者
-      this.currentClass = this.currentClass === 'el-icon-s-fold' ? 'el-icon-s-unfold' : 'el-icon-s-fold'
+      this.currentClass =
+        this.currentClass === 'el-icon-s-fold'
+          ? 'el-icon-s-unfold'
+          : 'el-icon-s-fold'
     },
     // 获取用户信息
     async getUserInfo () {
@@ -66,6 +74,9 @@ export default {
         this.$router.push('/login')
         window.localStorage.clear() // 清除本地在游览器上所有前端缓存
       }
+    },
+    hunt () {
+      this.$router.push('/home/articles')
     }
   },
   created () {
@@ -83,6 +94,7 @@ export default {
   .left-header {
     display: flex;
     align-items: center;
+
     i {
       font-size: 20px;
       margin-right: 4px;
@@ -91,6 +103,7 @@ export default {
   .layout-right {
     display: flex;
     align-items: center;
+    justify-content: flex-end;
     img {
       width: 40px;
       height: 40px;

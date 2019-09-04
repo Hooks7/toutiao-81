@@ -2,7 +2,7 @@
   <div class="login">
     <el-card class="login-card">
       <div class="title">
-        <img src="../../assets/img/12sa.png" />
+        <img src="../../assets/img/56.png" />
       </div>
       <el-form ref="form" :model="formData" :rules="rules">
         <el-form-item prop="mobile">
@@ -24,7 +24,8 @@
 </template>
 
 <script>
-import { LoginByMobile } from '../../api/login'
+// 接口封装
+import { LoginByMobile } from '@/api/login'
 export default {
   methods: {
     login () {
@@ -33,6 +34,7 @@ export default {
       this.$refs.form.validate(async isOk => {
         if (isOk) {
           let result = await LoginByMobile(this.formData)
+          // console.log(result)
           window.localStorage.setItem('user-info', JSON.stringify(result.data))
           this.$router.push('/home')
         }
@@ -40,18 +42,15 @@ export default {
     }
   },
   data () {
+    // 自定义检验
     var func = function (rule, value, callback) {
-      if (value) {
-        callback()
-      } else {
-        callback(new Error('您必须点击'))
-      }
+      value ? callback() : callback(new Error('您必须点击'))
     }
     return {
       // 定义数据
       formData: {
-        mobile: '',
-        code: '',
+        mobile: '13911111111',
+        code: '246810',
         check: false
       },
       // 定义数据规则
@@ -101,15 +100,16 @@ export default {
   align-items: center; /* 纵向 居中*/
   .login-card {
     width: 420px;
-    height: 340px;
+    height: 350px;
   }
   .title {
     text-align: center;
     margin-bottom: 10px;
   }
   img {
-    width: 200px;
-    height: 40px;
+    width: 320px;
+    height: 60px;
+    background-size: cover
   }
 }
 </style>

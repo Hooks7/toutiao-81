@@ -80,6 +80,7 @@ export default {
     },
     // 状态设置
     formatter (row, column, callValue, index) {
+      console.log(callValue)
       return callValue ? '正常' : '关闭'
     },
     // 关闭评论

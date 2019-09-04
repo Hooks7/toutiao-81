@@ -32,7 +32,8 @@
 </template>
 
 <script>
-import eventBus from '../../utils/eventBus'
+import eventBus from '@/utils/eventBus'
+import { getAccount, editAccount, instantUpload } from '@/api/account'
 
 export default {
   data () {
@@ -62,19 +63,16 @@ export default {
   methods: {
     // 获取数据
     async getUserInfo () {
-      let result = await this.$http({ url: 'user/profile' })
+      let result = await getAccount()
       this.formData = result.data
     },
     // 编辑用户个人资料
     saveUserInfo () {
       this.$refs.userForm.validate(async isOk => {
         if (isOk) {
-          await this.$http({
-            url: 'user/profile',
-            method: 'PATCH',
-            data: this.formData
-          })
+          await editAccount(this.formData)
           this.$message({ message: '保存成功', type: 'success' })
+          eventBus.$emit('updateUserInfoSuccess')
         }
       })
     },
@@ -82,11 +80,7 @@ export default {
     async uploadImg (params) {
       let data = new FormData()
       data.append('photo', params.file)
-      let result = await this.$http({
-        url: 'user/photo',
-        method: 'patch',
-        data
-      })
+      let result = await instantUpload(data)
       this.formData.photo = result.data.photo
       eventBus.$emit('updateUserInfoSuccess') // 触发
     }

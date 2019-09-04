@@ -1,7 +1,7 @@
 <template>
   <div class="layout-aside">
     <div class="title">
-      <img src="../../assets/img/logo_admin.png" :style = "{width:collapse?'200px': '120px'}" alt />
+      <img src="../../assets/img/56.png" :style = "{width:collapse?'60px': '200px'}" alt />
     </div>
     <el-menu
       class="el-menu-vertical-demo"
@@ -67,12 +67,11 @@ export default {
 
 <style lang='less' scoped>
 .title {
-  padding: 13px 0;
   text-align: center;
-  background-color: #F56C6C;
+
   img {
-    width: 120px;
-    height: 30px;
+    width: 200px;
+    height: 60px;
   }
 }
 </style>
