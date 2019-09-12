@@ -75,6 +75,7 @@
 </template>
 
 <script>
+import { gtArticles, gtChannels, dlArticles } from '@/api/articles'
 export default {
   data () {
     return {
@@ -100,10 +101,8 @@ export default {
     },
     // 查询文章
     async  getArticles (params) {
-      let result = await this.$http({
-        url: 'articles',
-        params: { ...params }
-      })
+      let result = await gtArticles({ params })
+
       this.list = result.data.results
       this.page.total = result.data.total_count
     },
@@ -121,16 +120,14 @@ export default {
       return params
     },
     async  getChannels () {
-      let result = await this.$http({
-        url: 'channels'
-      })
+      let result = await gtChannels()
       this.channels = result.data.channels
     },
     // 分页事件
     changePage (newPage) {
       this.page.currentPage = newPage
       // let conditions = this.getConditions()
-      // conditions.page = this.page.currentPage // 改变请求所需 参数  获取最新野马
+      // conditions.page = this.page.currentPage // 改变请求所需 参数  获取最新页码
       // conditions.per_page = this.page.pageSzie // 每页条数
       this.getArticles(this.getConditions()) // 携带参数
     },
@@ -160,10 +157,8 @@ export default {
     },
     async deltem (item) {
       await this.$confirm('您确定删除此条文章?', '提示')
-      await this.$http({
-        method: 'delete',
-        url: `/articles/${item.id.toString()}`
-      })
+
+      await dlArticles(item)
       this.getArticles(this.getConditions())
     }
 

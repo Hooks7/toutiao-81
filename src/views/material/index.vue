@@ -51,6 +51,7 @@
 </template>
 
 <script>
+import { upMaterial, scMaterial, dlMaterial, gtMaterial } from '@/api/material'
 export default {
   data () {
     return {
@@ -65,16 +66,11 @@ export default {
   },
   methods: {
     // 上传
-    uploadImg (a) {
+    async uploadImg (a) {
       let formData = new FormData()
       formData.append('image', a.file)
-      this.$http({
-        method: 'post',
-        url: 'user/images',
-        data: formData
-      }).then(result => {
-        this.getMaterial()
-      })
+      await upMaterial(formData)
+      this.getMaterial()
     },
     // 收藏操作
     async  collectOrCancel (item) {
@@ -82,20 +78,14 @@ export default {
       // 如果is_collected为false  则表示没有收藏 这时点击时  应该收藏\
       let mess = item.is_collected ? '取消收藏' : '收藏'
       await this.$confirm(`您确定${mess}这张图片吗`)
-      await this.$http({
-        method: 'put',
-        url: `/user/images/${item.id}`,
-        data: { collect: !item.is_collected }
-      })
+      await scMaterial(item, { collect: !item.is_collected })
       this.getMaterial()
     },
     // 删除
     async  delMaterial (item) {
       await this.$confirm('您确定删除此图片吗', '提示')
-      await this.$http({
-        method: 'delete',
-        url: `user/images/${item.id}`
-      })
+
+      await dlMaterial(item)
       this.getMaterial()
     },
     // 分页事件
@@ -110,13 +100,10 @@ export default {
     },
     //   获取图片列表
     async  getMaterial () {
-      let pageParams = {
+      let result = await gtMaterial({
+        collect: this.tabPosition === 'collect',
         page: this.page.currentPage,
-        per_page: this.page.pageSize
-      }
-      let result = await this.$http({
-        url: 'user/images',
-        params: { collect: this.tabPosition === 'collect', ...pageParams }
+        perPage: this.page.pageSize
       })
       // console.log(result.data)
       this.list = result.data.results

@@ -78,9 +78,8 @@ export default {
     },
     // 图片上传
     async uploadImg (params) {
-      let data = new FormData()
-      data.append('photo', params.file)
-      let result = await instantUpload(data)
+      console.log(params)
+      let result = await instantUpload('photo', params.file)
       this.formData.photo = result.data.photo
       eventBus.$emit('updateUserInfoSuccess') // 触发
     }

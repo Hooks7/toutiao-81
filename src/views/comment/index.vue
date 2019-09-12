@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { lookComment } from '@/api/comment'
 export default {
   data () {
     return {
@@ -65,14 +66,13 @@ export default {
     //   查询评论列表数据
     async  getcomments () {
       this.loading = true
-      let result = await this.$http({
-        url: '/articles',
-        params: {
-          response_type: 'comment',
-          page: this.page.currentpage, // 当前页数
-          per_page: this.page.pageSize // 每页条数
-        }
-      })
+      let params = {
+        response_type: 'comment',
+        page: this.page.currentpage, // 当前页数
+        per_page: this.page.pageSize // 每页条数
+      }
+      let result = await lookComment({ params })
+      console.log(result)
       this.list = result.data.results
       // 设置分页总数
       this.page.total = result.data.total_count
@@ -80,7 +80,7 @@ export default {
     },
     // 状态设置
     formatter (row, column, callValue, index) {
-      console.log(callValue)
+      // console.log(callValue)
       return callValue ? '正常' : '关闭'
     },
     // 关闭评论
@@ -93,6 +93,10 @@ export default {
         params: { article_id: row.id.toString() },
         data: { allow_comment: !row.comment_status }
       })
+      // await closeComment({
+      //   article_id: row.id.toString(),
+      //   allowComment: !row.comment_status
+      // })
       this.getcomments()
     }
   },

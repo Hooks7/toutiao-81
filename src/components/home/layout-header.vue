@@ -2,7 +2,7 @@
   <el-row type="flex" class="layout-header">
     <el-col :span="17" class="left-header">
       <i @click="openOrClose" :class="currentClass"></i>
-      <span>上海香蕉计划文化发展有限公司</span>
+      <span>今日头条</span>
     </el-col>
     <el-col :span="4">
       <!-- 搜索框 -->
