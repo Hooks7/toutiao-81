@@ -51,9 +51,17 @@ export default new Router({
       component: () => import('./views/fansdata')
     },
     {
+      // 搜索
+      path: '/home/searchText/:q',
+      name: 'searchText',
+      props: true,
+      component: () => import('./views/searchText/index.vue')
+    },
+    {
       path: '*',
       component: () => import('./views/404.vue')
     }
+
     ]
   }
     // {

@@ -84,7 +84,7 @@ export default {
         channel_id: null, // 频道id 当前选择的频道
         dateRange: null // 时间范围 是个数组
       },
-      defaultImg: require('../../assets/img/toutiao.png'), // 默认图片设置
+      defaultImg: require('../../assets/img/56.png'), // 默认图片设置
       channels: [], // 频道数据
       list: [], // 内容列表
       page: {

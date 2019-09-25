@@ -7,7 +7,7 @@
     <el-col :span="4">
       <!-- 搜索框 -->
       <el-input placeholder="请输入内容" prefix-icon="el-icon-search" v-model="seek"
-     @blur='hunt'></el-input>
+      @keyup.enter.native='hunt()'></el-input>
     </el-col>
     <el-col :span="3" class="layout-right">
       <!-- 图片设置 -->
@@ -30,13 +30,16 @@
 
 <script>
 import eventBus from '../../utils/eventBus'
+import { mapState } from 'vuex'
+
+// import { searchArticles } from '@/api/search'
 export default {
   data () {
     return {
       user: {},
       defaultImg: require('../../assets/img/avatar.jpg'),
       currentClass: 'el-icon-s-fold',
-      seek: ''
+      seek: '' // 输入框内容
     }
   },
   methods: {
@@ -75,16 +78,43 @@ export default {
         window.localStorage.clear() // 清除本地在游览器上所有前端缓存
       }
     },
-    hunt () {
-      this.$router.push('/home/articles')
+    // 跳转
+    async hunt () {
+      if (!this.seek) {
+        this.$router.push('/home/articles')
+      } else {
+        this.$store.commit('getValue', this.seek)
+        this.$router.push({
+          name: 'searchText',
+          params: {
+            q: this.seek
+          }
+        })
+      }
     }
   },
   created () {
+    // this.seek = this.$route.params.q
+    console.log(this.seek)
+    // 头部信息查询
     this.getUserInfo()
     eventBus.$on('updateUserInfoSuccess', () => {
       this.getUserInfo()
     })
+  },
+  computed: {
+    ...mapState(['value'])
+  },
+  watch: {
+    // seek (n) {
+    //   this.$store.commit('getValue', n)
+    //   this.seek = n
+    // }
+    // value (n) {
+
+    // }
   }
+
 }
 </script>
 
